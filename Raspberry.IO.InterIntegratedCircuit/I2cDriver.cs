@@ -478,7 +478,8 @@ namespace Raspberry.IO.InterIntegratedCircuit
                 if ((SafeReadUInt32(status) & Interop.BCM2835_BSC_S_CLKT) != 0) // Received Clock Stretch Timeout
                     throw new InvalidOperationException("Read operation failed with BCM2835_I2C_REASON_ERROR_CLKT status");
                 if (remaining != 0) // Not all data is received
-                    throw new InvalidOperationException(string.Format("Read operation failed with BCM2835_I2C_REASON_ERROR_DATA status, missing {0} bytes", remaining));
+                    throw new InvalidOperationException(
+                        $"Read operation failed with BCM2835_I2C_REASON_ERROR_DATA status, missing {remaining} bytes" );
 
                 WriteUInt32Mask(control, Interop.BCM2835_BSC_S_DONE, Interop.BCM2835_BSC_S_DONE);
 
@@ -490,11 +491,11 @@ namespace Raspberry.IO.InterIntegratedCircuit
         {
             switch (processor)
             {
-                case Processor.Bcm2708:
-                case Processor.BCM2835: // <- added this one JJ FIX per RB3
+                case Processor.Bcm2835:
                     return Interop.BCM2835_BSC1_BASE;
 
-                case Processor.Bcm2709:
+                case Processor.Bcm2836:
+                case Processor.Bcm2837:
                     return Interop.BCM2836_BSC1_BASE;
                 
                 default:
@@ -506,11 +507,11 @@ namespace Raspberry.IO.InterIntegratedCircuit
         {
             switch (processor)
             {
-                case Processor.Bcm2708:
-                case Processor.BCM2835: // <- added this one JJ FIX per RB3
+                case Processor.Bcm2835:
                     return Interop.BCM2835_GPIO_BASE;
 
-                case Processor.Bcm2709:
+                case Processor.Bcm2836:
+                case Processor.Bcm2837:
                     return Interop.BCM2836_GPIO_BASE;
 
                 default:
